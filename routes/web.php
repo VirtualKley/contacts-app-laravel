@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
@@ -27,15 +28,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Contact
 Route::get('/contact', fn () => Response::view('contact'));
-Route::post('/contact', function(Request $request) {
-    return Response::json(["message" => "hola"])->setStatusCode(400);
-});
+Route::post('/contact', function(Request $req) {
+    $data = $req-> all();
 
-Route::get('/change-password', fn () => Response::view('change-password'));
-Route::post('/change-password', function(Request $request) {
-    if (auth()->check()) {
-        return response("Password Change {$request->get('password')}");
-    }else{
-        return response("No Authenticated", 401);
-    }
+    DB::statement("INSERT INTO contacts (name, phone_number) VALUES(?,?)", [$data["name"], $data["phone_number"]]);
+
+    return "Contact stored";
 });
