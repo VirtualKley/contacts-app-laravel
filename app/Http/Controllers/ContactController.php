@@ -87,7 +87,7 @@ class ContactController extends Controller
         ]);
 
         $contact->update($data);
-        return redirect()-> route('home');
+        return redirect()->route('home');
     }
 
     /**
@@ -98,6 +98,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
+        return redirect()->route('home');
     }
 }
